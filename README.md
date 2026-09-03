@@ -7,6 +7,22 @@ an opt-in `/llms-full.txt`, and a same-origin WebMCP bridge.
 [GitHub repository](https://github.com/CorsenAI/corsen-context-express) ·
 [Download ZIP](https://github.com/CorsenAI/corsen-context-express/archive/refs/heads/main.zip)
 
+## Set up on your own site
+
+1. Clone this repository or add `@corsenai/corsen-context` to an existing
+   Express app, then `npm ci`.
+2. Copy `.env.example` to `.env` and set `SITE_URL` to your public origin.
+3. Replace the sample records in `content.js` with your public pages, or
+   implement the `ContentProvider` interface over your CMS or database.
+4. Run `npm test`, then run the server behind your HTTPS reverse proxy so
+   `/v1/mcp`, `/webmcp.js` and `/llms.txt` share your site's origin.
+5. Verify with `npx @corsenai/corsen-context-cli@2.0.1 doctor --url https://your-site.example`
+   and a WebMCP-capable browser.
+6. Revoke at any time with `CORSEN_CONTEXT_MCP_ENABLED=false` and a restart.
+
+The complete walkthrough, with a systemd unit, Nginx routes, platform notes,
+verification steps and rollback, is in [DEPLOYMENT.md](DEPLOYMENT.md).
+
 ## Requirements
 
 - Node.js 22.12 or newer (`.nvmrc` pins 22.13.0)
