@@ -51,6 +51,17 @@ assert.match(getResponse.headers.get('allow') || '', /\bPOST\b/i, `${label}: mis
 const homeResponse = await fetch(baseUrl);
 assert.equal(homeResponse.status, 200, `${label}: home page must return 200`);
 const home = await homeResponse.text();
+const expectedWhitespaceNormalization = "excerpt.replace(/\\s+/g, ' ')";
+const brokenWhitespaceNormalization = "excerpt.replace(/s+/g, ' ')";
+assert.equal(
+  home.split(expectedWhitespaceNormalization).length - 1,
+  2,
+  `${label}: rendered observatory must preserve both whitespace regexes`,
+);
+assert.ok(
+  !home.includes(brokenWhitespaceNormalization),
+  `${label}: rendered observatory must not turn /\\s+/ into /s+/`,
+);
 if (repositoryUrl) {
   assert.ok(home.includes(repositoryUrl), `${label}: home page does not link to its own repository`);
 }
